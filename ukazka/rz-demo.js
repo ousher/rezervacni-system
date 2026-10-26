@@ -289,6 +289,7 @@
     const post = ((init && init.method) || 'GET').toUpperCase() === 'POST';
     const f = new URLSearchParams(init && init.body ? String(init.body) : '');
     await new Promise(r => setTimeout(r, 120));          // ať to působí jako síť
+    S = null;   // D223 (Smith): vždy čerstvý stav z úložiště — druhé okno (host/obsluha) jinak nevidí nové rezervace a přepíše je
     if (/dostupnost\.php$/.test(url.pathname)) return dostupnost(url.searchParams);
     if (/odeslat\.php$/.test(url.pathname)) return post ? odeslat(f) : fail(405, 'Jen odeslání formuláře.');
     if (/api\.php$/.test(url.pathname)) return api(url.searchParams, f, post);
@@ -296,6 +297,7 @@
   };
 
   // ── pruh „UKÁZKA“ + reset ──
+  window.addEventListener('storage', e => { if (e.key === KEY) S = null; });   // změna z druhého okna
   window.RZ_DEMO_RESET = () => { try { localStorage.removeItem(KEY); } catch (e) {} S = null; location.reload(); };
   document.addEventListener('DOMContentLoaded', () => {
     const b = document.createElement('div');
