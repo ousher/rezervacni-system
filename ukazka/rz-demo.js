@@ -67,7 +67,9 @@
     if (table == null) table = pick(s.claims, date, t, p, online);
     else { const [a, b] = span(date, t); if (s.claims.some(c => c.d === date && c.s === table && a < c.b && c.a < b)) table = null; }
     if (table == null) return ['busy'];
-    const [a, b] = span(date, t), ref = `${base}-${table}${suffix || ''}`;
+    const [a, b] = span(date, t);
+    let ref = `${base}-${table}${suffix || ''}`;
+    for (let n = 2; s.claims.some(c => c.r === ref); n++) ref = `${base}-${table}-${n}${suffix || ''}`;   // D223 audit: po přesunu stolu stejné číslo = přepis cizího hosta
     s.claims.push({ d: date, s: table, a, b, p, r: ref, c: nowSec() });
     commit();
     return ['ok', table, ref];
