@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rezervační systém pro restaurace, herny a provozy</title>
-<meta name="description" content="Online rezervace pro restaurace, bowling, kulečník, lezení i ordinace a servisy. Potvrzení hned, přehled pro obsluhu v mobilu. 7 900 Kč jednorázově, bez povinného měsíčního poplatku.">
+<meta name="description" content="Online rezervace pro restaurace, bowling, kulečník, lezení i ordinace a servisy. Potvrzení hned, přehled pro obsluhu v mobilu. Zřízení 7 900 Kč, provoz a péče 390 Kč měsíčně.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://rezervacni-system.online/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://rezervacni-system.online/">
 <meta property="og:title" content="Lidé si rezervují sami. Vy jen víte, kdo přijde.">
-<meta property="og:description" content="Online rezervace pro restaurace, bowling, kulečník, lezení i ordinace a servisy. Potvrzení hned, přehled pro obsluhu v mobilu. 7 900 Kč jednorázově.">
+<meta property="og:description" content="Online rezervace pro restaurace, bowling, kulečník, lezení i ordinace a servisy. Potvrzení hned, přehled pro obsluhu v mobilu. Nastavím a starám se.">
 <meta property="og:image" content="https://rezervacni-system.online/og.png">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
@@ -23,7 +23,7 @@
 <style>
   :root{
     --paper:#f2f4f3; --card:#ffffff; --ink:#14212b; --dim:#55626c; --line:#d9dfdd;
-    --signal:#e4572e; --signal-ink:#ffffff; --teal:#1f6f66; --teal-soft:#e2efec;
+    --signal:#e4572e; --signal-ink:#ffffff; --btn:#b73e1e; --teal:#1f6f66; --teal-soft:#e2efec;
     --ticket:#fffdf6; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   }
   *{box-sizing:border-box}
@@ -37,7 +37,7 @@
   .kicker{font:700 13px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
   .lead{font-size:clamp(18px,2.2vw,21px);color:var(--dim);max-width:58ch}
   section{padding-block:72px}
-  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:12px;background:var(--signal);color:var(--signal-ink);font-weight:700;text-decoration:none;border:2px solid var(--signal)}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:12px;background:var(--btn);color:var(--signal-ink);font-weight:700;text-decoration:none;border:2px solid var(--btn)}
   .btn.ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
   .btn:hover{filter:brightness(.95)}
 
@@ -274,7 +274,7 @@
   <section id="cena" style="padding-top:0">
     <div class="wrap">
       <div class="kicker">Cena</div>
-      <h2>Jednou zaplatíte. Měsíční poplatek jen když chcete.</h2>
+      <h2>Zřízení jednou, pak péče za 390 Kč měsíčně.</h2>
       <div class="price">
         <div class="pc main">
           <div class="k">Zřízení · jednorázově</div>
@@ -287,26 +287,28 @@
           </ul>
         </div>
         <div class="pc">
-          <div class="k">Provoz a správa · volitelné</div>
+          <div class="k">Provoz a péče · měsíčně</div>
           <div class="v">390 Kč <small>/ měsíc</small></div>
           <ul>
-            <li>hosting, když nemáte vlastní web</li>
-            <li>změny časů, stolů, svátků</li>
-            <li>drobné úpravy na přání</li>
-            <li>bez závazku, zrušíte kdykoli</li>
+            <li>hosting a provoz systému</li>
+            <li>údržba, opravy a aktualizace</li>
+            <li>změny časů, stolů, svátků a drobné úpravy</li>
+            <li>konkrétní člověk, kterému zavoláte</li>
+            <li>výpovědní lhůta 2 měsíce</li>
           </ul>
         </div>
       </div>
-      <p class="note">Ceny jsou konečné, nejsem plátcem DPH. Žádné provize z rezervací.</p>
+      <p class="note">První rok celkem 12 580 Kč (7 900 + 12 × 390). Ceny jsou konečné, nejsem plátcem DPH. Žádné provize z rezervací.</p>
 
       <div class="tw"><table>
         <tr><th></th><th>Tento systém</th><th>Velké rezervační portály</th></tr>
-        <tr><td>Měsíční poplatek</td><td class="yes">žádný povinný</td><td>obvykle předplatné nebo poplatek za hosta</td></tr>
+        <tr><td>Kdo to nastaví</td><td class="yes">já, přímo u vás, včetně zaškolení</td><td>obvykle si to nastavíte sami</td></tr>
+        <tr><td>Poplatky</td><td>390 Kč měsíčně, žádné provize z rezervací</td><td>od bezplatné verze po předplatné, někde poplatek za hosta</td></tr>
         <tr><td>Kontakty hostů</td><td class="yes">jen vaše</td><td>vede je i platforma</td></tr>
         <tr><td>Úpravy na míru</td><td class="yes">ano, přímo pro váš provoz</td><td>jen co platforma nabízí</td></tr>
         <tr><td>Najdou vás noví hosté na portálu</td><td>ne, rezervují přes váš web a sítě</td><td class="yes">ano, to je jejich síla</td></tr>
       </table></div>
-      <p class="note">Poctivě: když chcete hlavně nové hosty z velkého portálu, je portál lepší volba. Když chcete, aby vaši lidé pohodlně rezervovali u vás, je tohle levnější a máte to pod kontrolou.</p>
+      <p class="note">Poctivě: když chcete hlavně nové hosty z velkého portálu, nebo si všechno rádi nastavíte sami, je portál dobrá volba. Tohle je pro provozy, které chtějí rezervace u sebe a někoho, kdo je nastaví a postará se o ně.</p>
     </div>
   </section>
 
