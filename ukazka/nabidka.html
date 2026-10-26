@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Rezervace stolů pro vaši restauraci</title>
+<style>
+  :root{--brand:#9c3d1c;--brand-soft:#f6e7df;--bg:#fbf8f3;--card:#fff;--ink:#24201c;--dim:#6f6860;--line:#e7e0d6;--ok:#2f7d4f}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 16px 56px}
+  h1{font-size:32px;line-height:1.12;margin:0 0 12px;text-wrap:balance}
+  h2{font-size:22px;margin:40px 0 14px;text-wrap:balance}
+  .lead{font-size:19px;color:var(--dim);margin:0 0 22px;max-width:62ch}
+  .cta{display:flex;flex-wrap:wrap;gap:10px}
+  .btn{display:inline-block;padding:13px 20px;border-radius:999px;background:var(--brand);color:#fff;text-decoration:none;font-weight:700}
+  .btn.ghost{background:transparent;color:var(--brand);border:2px solid var(--brand)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:600px){.grid{grid-template-columns:1fr} h1{font-size:27px}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+  .card b{display:block;margin-bottom:4px}
+  .card span{color:var(--dim);font-size:15.5px}
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  ol.steps li{counter-increment:s;position:relative;padding:12px 16px 12px 54px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+  ol.steps li::before{content:counter(s);position:absolute;left:14px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-weight:800;display:grid;place-items:center;font-size:15px}
+  .price{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media (max-width:600px){.price{grid-template-columns:1fr}}
+  .pc{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:20px}
+  .pc.main{border-color:var(--brand)}
+  .pc .k{font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:700}
+  .pc .v{font-size:34px;font-weight:800;margin:4px 0;font-variant-numeric:tabular-nums}
+  .pc .v small{font-size:16px;font-weight:600;color:var(--dim)}
+  .pc ul{margin:10px 0 0;padding-left:20px;color:var(--dim);font-size:15.5px}
+  .pc li{margin:4px 0}
+  table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-size:15.5px}
+  th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{background:var(--brand-soft);font-size:14px}
+  .tw{overflow-x:auto}
+  .yes{color:var(--ok);font-weight:700}
+  .note{color:var(--dim);font-size:15px}
+  .contact{margin-top:40px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+  .contact b{font-size:19px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Rezervace stolů online pro vaši restauraci</h1>
+  <p class="lead">Host si sám vybere počet osob, den a čas. Rezervace je potvrzená hned a obsluha ji vidí v mobilu, na počítači u pokladny nebo na tabletu. Méně telefonů v pátek večer, žádné ztracené lístečky.</p>
+  <div class="cta">
+    <a class="btn" href="./start.html">Vyzkoušet ukázku</a>
+    <a class="btn ghost" href="#cena">Kolik to stojí</a>
+  </div>
+
+  <h2>Co to umí</h2>
+  <div class="grid">
+    <div class="card"><b>👤 Rezervace za 30 vteřin</b><span>Osoby, den, čas, jméno a telefon. Funguje na mobilu, žádná registrace.</span></div>
+    <div class="card"><b>🪑 Stůl vybere systém</b><span>Dvojice nezabere salonek. Velké skupiny dostanou „zavolejte nám“.</span></div>
+    <div class="card"><b>📱 Panel pro obsluhu</b><span>Na čemkoli s prohlížečem — mobil vedoucího, počítač u pokladny, tablet. Kdo dnes přijde, který stůl je volný. Každá nová rezervace přijde i e-mailem.</span></div>
+    <div class="card"><b>☎️ I telefonické rezervace</b><span>Obsluha je zapíše do stejného panelu, takže web nikdy neprodá obsazený stůl.</span></div>
+    <div class="card"><b>🔄 Přesuny a zrušení</b><span>Jedním ťuknutím jiný stůl, „přišli / nepřišli“, zrušení uvolní místo na webu.</span></div>
+    <div class="card"><b>🔒 Data zůstávají vám</b><span>Běží na vašem webu. Kontakty hostů se den po rezervaci samy mažou.</span></div>
+  </div>
+
+  <h2>Jak to proběhne</h2>
+  <ol class="steps">
+    <li><b>Krátká schůzka u vás</b> — stoly, kapacity, otevírací doba, které stoly nechat jen pro hosty z ulice.</li>
+    <li><b>Do týdne nastavím a nasadím</b> — v barvách podniku, na váš web (nebo na samostatnou adresu, když web nemáte). QR kód na stoly a plakát.</li>
+    <li><b>Zaškolení obsluhy (30 minut)</b> — panel nastavím na zařízení, které už máte (mobil, počítač, tablet), PIN a ikonka na ploše. Žádný nový hardware.</li>
+  </ol>
+
+  <h2 id="cena">Kolik to stojí</h2>
+  <div class="price">
+    <div class="pc main">
+      <div class="k">Zřízení · jednorázově</div>
+      <div class="v">7 900 Kč</div>
+      <ul>
+        <li>nastavení stolů a provozu podniku</li>
+        <li>vzhled v barvách podniku</li>
+        <li>nasazení na váš web + QR kód</li>
+        <li>panel obsluhy + zaškolení</li>
+      </ul>
+    </div>
+    <div class="pc">
+      <div class="k">Provoz a správa · volitelné</div>
+      <div class="v">390 Kč <small>/ měsíc</small></div>
+      <ul>
+        <li>hosting, když nemáte vlastní web</li>
+        <li>změny stolů, časů, svátků</li>
+        <li>drobné úpravy na přání</li>
+        <li>aktualizace a dohled</li>
+        <li>bez závazku, zrušíte kdykoli</li>
+      </ul>
+    </div>
+  </div>
+  <p class="note">Ceny jsou konečné, nejsem plátcem DPH. Žádné provize z rezervací.</p>
+
+  <h2>Proč ne velká platforma?</h2>
+  <div class="tw"><table>
+    <tr><th></th><th>Tento systém</th><th>Rezervační portály</th></tr>
+    <tr><td>Měsíční poplatek</td><td class="yes">žádný povinný</td><td>obvykle předplatné nebo poplatek za hosta</td></tr>
+    <tr><td>Kontakty hostů</td><td class="yes">jen vaše, po dni se mažou</td><td>vede je i platforma</td></tr>
+    <tr><td>Úpravy na míru</td><td class="yes">ano, přímo pro váš podnik</td><td>jen co platforma nabízí</td></tr>
+    <tr><td>Hosté vás najdou na portálu</td><td>ne — rezervují přes váš web, Google a sítě</td><td class="yes">ano, to je jejich síla</td></tr>
+  </table></div>
+  <p class="note">Poctivě: když chcete hlavně nové hosty z velkého portálu, je portál lepší volba. Když chcete, aby vaši hosté pohodlně rezervovali u vás, je tohle levnější a máte to pod kontrolou.</p>
+
+  <div class="contact">
+    <b>Ondřej Šrámek</b><br>
+    <span class="note"><a href="tel:+420720758774" style="color:inherit">+420 720 758 774</a> · <a href="mailto:ondrej@tia-framework.com" style="color:inherit">ondrej@tia-framework.com</a></span><br>
+    <span class="note">Stejný systém už běží v provozu v jedné pražské hospodě.</span>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#16130f">
+<title>Rezervace · obsluha</title>
+<style>
+:root{--bg:#16130f;--panel:#211d18;--panel2:#2a251f;--line:#3a332b;--text:#f4efe8;--dim:#b3aa9e;--faint:#857c71;
+  --brand:#d8693f;--gold:#e7b552;--green:#4cbf83;--blue:#6aaee6;--red:#e2574a}
+*{box-sizing:border-box;margin:0}
+html,body{background:var(--bg);color:var(--text);font:16px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+button,select{font:inherit;color:inherit;cursor:pointer;border:0;background:none;touch-action:manipulation}
+.hide{display:none!important}
+
+#pin{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;text-align:center}
+#pin h1{font-size:22px}
+#pin h1 small{display:block;color:var(--dim);font-size:14px;font-weight:500;margin-top:4px}
+.dots{display:flex;gap:14px;height:22px}
+.dots i{width:18px;height:18px;border-radius:50%;border:2px solid var(--line)}
+.dots i.on{background:var(--gold);border-color:var(--gold)}
+.keys{display:grid;grid-template-columns:repeat(3,88px);gap:12px}
+.keys button{height:72px;border-radius:18px;background:var(--panel);border:1px solid var(--line);font-size:28px;font-weight:600}
+.keys .go{background:var(--brand);border:0;font-size:19px}
+#pinMsg{min-height:22px;color:var(--red);font-weight:600}
+#demoPin{color:var(--gold);font-size:14px}
+
+header{position:sticky;top:0;z-index:5;background:rgba(22,19,15,.97);border-bottom:1px solid var(--line);
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;padding:10px 14px}
+.brand{font-weight:800}
+.daynav{display:flex;align-items:center;gap:6px}
+.daynav button{height:46px;min-width:46px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:22px;font-weight:700}
+#dayLabel{min-width:170px;text-align:center;font-weight:700;font-size:17px}
+#dayLabel small{display:block;font-size:12.5px;font-weight:500;color:var(--dim)}
+#clock{font-size:28px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--gold)}
+.btn{height:46px;padding:0 16px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-weight:700}
+.btn.primary{background:var(--brand);border:0}
+.btn.gold{border-color:var(--gold);color:var(--gold)}
+.spacer{flex:1}
+
+.summary{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 14px 0;color:var(--dim);font-size:14.5px}
+.summary b{color:var(--text)}
+.summary label{display:flex;align-items:center;gap:8px;margin-left:auto}
+.summary input{width:20px;height:20px;accent-color:var(--gold)}
+#alert{margin:10px 14px 0;padding:12px 14px;border-radius:14px;background:rgba(231,181,82,.12);border:2px solid var(--gold);display:flex;align-items:center;gap:12px;font-weight:700}
+#alert span{flex:1}
+
+/* stoly teď */
+.tables{display:flex;gap:8px;overflow-x:auto;padding:12px 14px 2px}
+.tb{flex:0 0 auto;min-width:118px;padding:9px 11px;border-radius:12px;background:var(--panel);border:1px solid var(--line)}
+.tb b{display:block;font-size:14.5px}
+.tb span{font-size:12.5px;color:var(--dim)}
+.tb.busy{border-color:var(--gold);background:rgba(231,181,82,.08)}
+.tb.soon{border-color:var(--brand)}
+.tb .off{color:var(--faint)}
+
+.list{display:grid;gap:10px;padding:12px 14px 40px;grid-template-columns:repeat(auto-fill,minmax(330px,1fr))}
+@media (max-width:700px){.list{grid-template-columns:1fr}}
+.hour{grid-column:1/-1;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-top:6px;border-bottom:1px solid var(--line);padding-bottom:4px}
+.empty{color:var(--faint);padding:20px 2px}
+.card{border-radius:14px;background:var(--panel);border:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:6px}
+.card .top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.card .t{font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.card .pp{font-size:17px;font-weight:800;color:var(--gold)}
+.card select{margin-left:auto;height:38px;border-radius:10px;background:var(--panel2);border:1px solid var(--line);padding:0 8px;font-weight:700;max-width:52%}
+.card .n{font-size:17px;font-weight:700;overflow-wrap:anywhere}
+.card .meta{font-size:14px;color:var(--dim);display:flex;flex-wrap:wrap;gap:4px 12px}
+.card .meta a{color:var(--gold);text-decoration:none;font-weight:700}
+.tag{font-size:11.5px;font-weight:800;letter-spacing:.06em;padding:3px 8px;border-radius:999px;background:var(--line);color:var(--dim)}
+.tag.web{background:rgba(106,174,230,.16);color:var(--blue)}
+.tag.tel{background:rgba(231,181,82,.16);color:var(--gold)}
+.tag.now{background:var(--gold);color:#1a1307}
+.tag.soon{background:rgba(216,105,63,.2);color:#ffa27e}
+.tag.new{background:var(--brand);color:#fff}
+.flags{display:flex;flex-wrap:wrap;gap:6px}
+.acts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:2px}
+.acts button{height:46px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);font-weight:700;font-size:15px}
+.acts .yes.on{background:var(--green);border-color:var(--green);color:#06150d}
+.acts .no.on{background:#5a1d17;border-color:var(--red)}
+.acts .x{color:var(--red)}
+.acts .x.sure{background:var(--red);color:#fff}
+.card.now{border:2px solid var(--gold)}
+.card.past,.card.noshow{opacity:.55}
+.card.arrived{border-color:rgba(76,191,131,.6)}
+.card.cancelled{opacity:.45}
+.card.cancelled .t,.card.cancelled .n{text-decoration:line-through}
+.card.fresh{border:2px solid var(--brand)}
+
+#dlg{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.72);display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:16px 10px}
+.box{width:min(620px,100%);background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.box h3{font-size:19px}
+.lbl{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{height:46px;min-width:52px;padding:0 12px;border-radius:12px;background:var(--panel2);border:1px solid var(--line);font-weight:700}
+.seg button.on{border-color:var(--gold);color:var(--gold);background:rgba(231,181,82,.1)}
+.seg button:disabled{opacity:.3;text-decoration:line-through}
+.slotsF{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;max-height:210px;overflow:auto}
+.box input{width:100%;height:48px;border-radius:12px;background:var(--bg);border:1px solid var(--line);color:var(--text);padding:0 12px;font:inherit;font-size:17px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+#dlgMsg{min-height:20px;color:var(--red);font-weight:700}
+.boxacts{display:flex;gap:10px;justify-content:flex-end;position:sticky;bottom:-16px;background:var(--panel);padding:10px 0 4px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<section id="pin" class="hide">
+  <h1 id="pinTitle">Rezervace<small>panel obsluhy</small></h1>
+  <div class="dots" id="dots"></div>
+  <div class="keys" id="keys"></div>
+  <div id="pinMsg"></div>
+  <div id="demoPin"></div>
+</section>
+
+<section id="app" class="hide">
+  <header>
+    <div class="brand" id="brand">Rezervace</div>
+    <div class="daynav">
+      <button id="prev" aria-label="Předchozí den">‹</button>
+      <div id="dayLabel"></div>
+      <button id="next" aria-label="Další den">›</button>
+    </div>
+    <button class="btn" id="today">Dnes</button>
+    <div id="clock"></div>
+    <span class="spacer"></span>
+    <button class="btn primary" id="addBtn">+ Telefonická</button>
+    <button class="btn" id="logout">Odhlásit</button>
+  </header>
+  <div id="alert" class="hide"><span id="alertText"></span><button class="btn gold" id="alertOk">Beru na vědomí</button></div>
+  <div class="summary" id="summary"></div>
+  <div class="tables" id="tables"></div>
+  <div class="list" id="list"></div>
+</section>
+
+<div id="dlg" class="hide" role="dialog" aria-modal="true" aria-labelledby="dlgT">
+  <div class="box">
+    <h3 id="dlgT">Telefonická rezervace</h3>
+    <div id="fKindW"><div class="lbl">Co</div><div class="seg" id="fK"></div></div>
+    <div><div class="lbl" id="fPl">Osob</div><div class="seg" id="fP"></div></div>
+    <div id="fDurW" class="hide"><div class="lbl">Délka hry</div><div class="seg" id="fD"></div></div>
+    <div><div class="lbl">Čas příchodu</div><div class="seg slotsF" id="fT"></div></div>
+    <div id="fSW"><div class="lbl">Stůl</div><div class="seg" id="fS"></div></div>
+    <div class="row2">
+      <div><div class="lbl">Jméno</div><input id="fName" autocomplete="off" placeholder="Jana Nováková"></div>
+      <div><div class="lbl">Telefon</div><input id="fPhone" type="tel" autocomplete="off" placeholder="+420 …"></div>
+    </div>
+    <div><div class="lbl">Poznámka</div><input id="fNote" autocomplete="off" maxlength="200" placeholder="oslava, dětská židlička…"></div>
+    <div id="dlgMsg"></div>
+    <div class="boxacts"><button class="btn" id="dlgCancel">Zavřít</button><button class="btn primary" id="dlgSave">Uložit rezervaci</button></div>
+  </div>
+</div>
+
+<script src="../rz-demo.js"></script>
+<script>
+'use strict';
+const API = 'api.php';
+const $ = id => document.getElementById(id);
+const DAYS = ['neděle','pondělí','úterý','středa','čtvrtek','pátek','sobota'];
+const pad = n => String(n).padStart(2,'0');
+const hhmm = m => `${pad(m===1440?24:Math.floor(m/60)%24)}:${pad(m%60)}`;
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const osob = p => p === 1 ? 'osoba' : p < 5 ? 'osoby' : 'osob';
+
+async function call(a, data, q = ''){
+  const opt = data ? {method:'POST', body:new URLSearchParams(data), headers:{'X-RZ':'1'}, credentials:'same-origin'}
+                   : {credentials:'same-origin', cache:'no-store'};
+  const r = await fetch(`${API}?a=${a}${q}`, opt);
+  const j = await r.json().catch(() => ({ok:false, error:'Server neodpověděl.'}));
+  if (r.status === 401 && a !== 'login') { showPin(); throw new Error(j.error || 'Přihlaste se.'); }
+  if (!r.ok || !j.ok) throw new Error(j.error || `Chyba ${r.status}`);
+  return j;
+}
+
+/* PIN */
+let pin = '';
+function drawDots(){ $('dots').innerHTML = Array.from({length:Math.max(4,pin.length)}, (_,i) => `<i class="${i<pin.length?'on':''}"></i>`).join(''); }
+function showPin(msg=''){ $('app').classList.add('hide'); $('pin').classList.remove('hide'); pin=''; drawDots(); $('pinMsg').textContent = msg; }
+$('keys').innerHTML = ['1','2','3','4','5','6','7','8','9','⌫','0','OK'].map(k => `<button data-k="${k}" class="${k==='OK'?'go':''}">${k}</button>`).join('');
+$('keys').addEventListener('click', async e => {
+  const k = e.target.closest('button')?.dataset.k; if (!k) return;
+  unlockAudio();
+  if (k === '⌫') pin = pin.slice(0,-1);
+  else if (k === 'OK'){
+    if (pin.length < 4){ $('pinMsg').textContent = 'PIN má aspoň 4 číslice.'; return; }
+    try { await call('login', {pin}); pin=''; startApp(); } catch(err){ pin=''; drawDots(); $('pinMsg').textContent = err.message; }
+    return;
+  } else if (pin.length < 8) pin += k;
+  $('pinMsg').textContent = ''; drawDots();
+});
+
+/* zvuk nové rezervace */
+let actx = null;
+function unlockAudio(){ try { actx = actx || new (window.AudioContext||window.webkitAudioContext)(); if (actx.state==='suspended') actx.resume(); } catch(e){} }
+function beep(){ if (!actx) return; [0,.22].forEach(t => { const o=actx.createOscillator(), g=actx.createGain(); o.frequency.value=880; o.connect(g); g.connect(actx.destination);
+  g.gain.setValueAtTime(.0001,actx.currentTime+t); g.gain.exponentialRampToValueAtTime(.3,actx.currentTime+t+.02); g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+t+.18);
+  o.start(actx.currentTime+t); o.stop(actx.currentTime+t+.2); }); }
+document.addEventListener('pointerdown', unlockAudio, {once:true});
+
+/* PANEL */
+let view = iso(new Date()), data = null, showCancelled = false, sureCancel = null;
+const SEEN_KEY = 'rz_seen';
+let seen = (() => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch(e){ return 0; } })();
+const fresh = new Set();
+const allUnits = () => data.tables.map(t => ({id:t.id, n:t.n})).concat(...(data.groups || []).map(g => g.items));
+const tname = ids => String(ids || '').split('+').map(id => (allUnits().find(t => t.id === id) || {n:id}).n).join(' + ');
+const grp = id => (data.groups || []).find(g => g.id === id);
+const hod = m => m >= 60 ? (m/60).toString().replace('.', ',') + ' h' : m + ' min';
+const ICON = {bowling:'🎳', kulecnik:'🎱', pool:'🎱', karambol:'🎱', snooker:'🎱', sipky:'🎯', darts:'🎯', lezeni:'🧗'};
+const ppl = (g, p) => { const w = (g && g.people) || 'hráčů'; return w === 'osob' && p ? osob(p) : w; };
+
+function dayTitle(s){
+  const d = new Date(s+'T12:00:00'), t = iso(new Date()), tm = iso(new Date(Date.now()+864e5));
+  const rel = s===t ? 'Dnes' : s===tm ? 'Zítra' : DAYS[d.getDay()].replace(/^./, c=>c.toUpperCase());
+  return `${rel}<small>${DAYS[d.getDay()]} ${d.getDate()}. ${d.getMonth()+1}. ${d.getFullYear()}</small>`;
+}
+function shift(n){ const d = new Date(view+'T12:00:00'); d.setDate(d.getDate()+n); view = iso(d); load(); }
+$('prev').onclick = () => shift(-1); $('next').onclick = () => shift(1);
+$('today').onclick = () => { view = iso(new Date()); load(); };
+$('logout').onclick = async () => { try { await call('logout', {}); } catch(e){} showPin(); };
+
+async function load(){
+  $('dayLabel').innerHTML = dayTitle(view);
+  try { data = await call('day', null, `&date=${view}`); render(); } catch(err){ $('summary').textContent = '⚠ ' + err.message; }
+}
+
+function nowMin(){ const n = new Date(); return iso(n) === view ? n.getHours()*60 + n.getMinutes() : null; }
+
+function render(){
+  const nm = nowMin(), pastDay = view < iso(new Date());
+  const live = data.items.filter(x => x.st !== 'cancelled');
+  $('summary').innerHTML = data.open == null ? '<span><b>Zavřeno</b></span>' :
+    `<span><b>${live.length}</b> rezervací</span><span><b>${live.filter(x=>!x.g).reduce((s,x)=>s+x.p,0)}</b> osob u stolů</span>`+
+    (data.groups||[]).map(gr => `<span><b>${live.filter(x=>x.g===gr.id).reduce((s,x)=>s+x.p,0)}</b> ${esc(ppl(gr))} · ${esc(gr.label)}</span>`).join('')+
+    `<span><b>${live.filter(x=>x.st==='arrived').length}</b> přišli</span><span><b>${live.filter(x=>x.st==='noshow').length}</b> nepřišli</span>`+
+    `<span>otevřeno ${hhmm(data.open)}–${hhmm(data.close)}</span>`+
+    `<label><input type="checkbox" id="showC" ${showCancelled?'checked':''}> zrušené (${data.items.length-live.length})</label>`;
+  if ($('showC')) $('showC').onchange = e => { showCancelled = e.target.checked; render(); };
+
+  // stoly teď: kdo sedí, kdy přijde další
+  const ref = nm ?? (pastDay ? null : data.open);
+  // dráhy první — u podniku s 20+ stoly by jinak zmizely za okrajem lišty
+  const strip = [].concat(...(data.groups || []).map(g => g.items.map(i => ({id:i.id, n:i.n, cap:g.per, online:true, kind:g.id})))).concat(data.tables.map(t => ({...t, kind:''})));
+  $('tables').innerHTML = strip.map(t => {
+    const mine = live.filter(x => x.s.split('+').includes(t.id)).sort((a,b) => a.a - b.a);
+    let cls = 'tb', txt = 'volno';
+    if (ref != null){
+      const cur = mine.find(x => x.a <= ref && ref < x.b), nxt = mine.find(x => x.a > ref);
+      if (cur){ cls += ' busy'; txt = `${cur.p} os. do ${hhmm(cur.b)}`; }
+      else if (nxt){ if (nxt.a - ref <= 60) cls += ' soon'; txt = `volno · ${hhmm(nxt.a)} (${nxt.p})`; }
+    } else txt = `${mine.length} rez.`;
+    return `<div class="${cls}"><b>${t.kind ? (ICON[t.kind] || '⏱') + ' ' : ''}${esc(t.n)}</b><span>${t.kind ? '' : t.cap + ' míst'}${t.online?'':' · <i class="off">jen obsluha</i>'}${t.kind ? '' : ' · '}${txt}</span></div>`;
+  }).join('');
+
+  const items = data.items.filter(x => showCancelled || x.st !== 'cancelled');
+  if (!items.length){ $('list').innerHTML = `<div class="empty">${data.open == null ? 'Tento den je zavřeno.' : 'Zatím žádné rezervace.'}</div>`; return; }
+  let html = '', lastH = -1;
+  for (const x of items){
+    const h = Math.floor(x.a/60);
+    if (h !== lastH){ html += `<div class="hour">${pad(h)}:00</div>`; lastH = h; }
+    html += card(x, nm, pastDay);
+  }
+  $('list').innerHTML = html;
+}
+
+function card(x, nm, pastDay){
+  let cls = 'card', tags = [];
+  if (x.st === 'cancelled') cls += ' cancelled'; else if (x.st === 'arrived') cls += ' arrived'; else if (x.st === 'noshow') cls += ' noshow';
+  if (x.st !== 'cancelled' && nm !== null){
+    if (nm >= x.a && nm < x.b){ cls += ' now'; tags.push(`<span class="tag now">${x.g ? 'HRAJÍ' : 'U STOLU'}</span>`); }
+    else if (x.a > nm && x.a - nm <= 60) tags.push(`<span class="tag soon">ZA ${x.a-nm} MIN</span>`);
+    else if (x.b <= nm) cls += ' past';
+  }
+  if (pastDay) cls += ' past';
+  if (fresh.has(x.r)){ cls += ' fresh'; tags.unshift('<span class="tag new">NOVÁ</span>'); }
+  tags.push(x.via === 'phone' ? '<span class="tag tel">TELEFON</span>' : '<span class="tag web">WEB</span>');
+  if (x.st === 'cancelled') tags.push('<span class="tag">ZRUŠENO</span>');
+  const g = x.g ? grp(x.g) : null;
+  const sel = (x.st === 'cancelled' || g) ? `<span class="meta" style="margin-left:auto;font-weight:700">${g ? (ICON[g.id] || '⏱') + ' ' : ''}${esc(x.s ? tname(x.s) : '')}</span>` :
+    `<select data-move="${esc(x.r)}" aria-label="Stůl">${data.tables.map(t =>
+      `<option value="${t.id}" ${t.id===x.s?'selected':''} ${t.cap < x.p ? 'disabled' : ''}>${esc(t.n)} (${t.cap})</option>`).join('')}</select>`;
+  const acts = x.st === 'cancelled' ? '' : `<div class="acts">
+    <button class="yes ${x.st==='arrived'?'on':''}" data-a="arrived" data-r="${esc(x.r)}">✓ Přišli</button>
+    <button class="no ${x.st==='noshow'?'on':''}" data-a="noshow" data-r="${esc(x.r)}">Nepřišli</button>
+    <button class="x ${sureCancel===x.r?'sure':''}" data-a="cancel" data-r="${esc(x.r)}">${sureCancel===x.r?'Opravdu?':'Zrušit'}</button></div>`;
+  return `<div class="${cls}"><div class="top"><span class="t">${hhmm(x.a)}</span><span class="pp">${g ? `${x.p} ${esc(ppl(g, x.p))} · ${hod(x.b - x.a)}` : `${x.p} ${osob(x.p)}`}</span>${sel}</div>
+    <div class="flags">${tags.join('')}</div>
+    <div class="n">${esc(x.n) || '—'}</div>
+    <div class="meta">${x.ph ? `<a href="tel:${esc(x.ph.replace(/[^+\d]/g,''))}">📞 ${esc(x.ph)}</a>` : ''}${x.em ? `<span>✉ ${esc(x.em)}</span>` : ''}<span>do ${hhmm(x.b)}</span></div>
+    ${x.note ? `<div class="meta">📝 ${esc(x.note)}</div>` : ''}${acts}</div>`;
+}
+
+$('list').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-a]'); if (!b) return;
+  const ref = b.dataset.r, a = b.dataset.a;
+  try {
+    if (a === 'cancel'){
+      if (sureCancel !== ref){ sureCancel = ref; render(); setTimeout(() => { if (sureCancel === ref){ sureCancel = null; render(); } }, 5000); return; }
+      sureCancel = null; await call('cancel', {ref});
+    } else {
+      const cur = data.items.find(x => x.r === ref);
+      await call('status', {ref, st: cur && cur.st === a ? 'new' : a});
+    }
+    fresh.delete(ref); load();
+  } catch(err){ alert(err.message); }
+});
+$('list').addEventListener('change', async e => {
+  const s = e.target.closest('select[data-move]'); if (!s) return;
+  try { await call('move', {ref: s.dataset.move, table: s.value}); } catch(err){ alert(err.message); }
+  load();
+});
+
+/* nové rezervace z webu: každých 30 s */
+let lastCount = 0;
+async function checkNew(){
+  try {
+    const r = await call('new', null, `&since=${seen}`);
+    if (r.items.length){
+      r.items.forEach(x => fresh.add(x.r));
+      const x = r.items[r.items.length-1];
+      $('alertText').textContent = r.items.length === 1
+        ? `Nová rezervace z webu: ${x.d.split('-').reverse().slice(0,2).join('. ')}. v ${hhmm(x.a)}, ${x.g ? (grp(x.g) ? grp(x.g).label : x.g) + ', ' + x.p + ' ' + ppl(grp(x.g), x.p) : x.p + ' ' + osob(x.p)}`
+        : `${r.items.length} nové rezervace z webu — označené barevně`;
+      if ($('alert').classList.contains('hide') || r.items.length !== lastCount) beep();
+      lastCount = r.items.length; $('alert').classList.remove('hide');
+    }
+    load();
+  } catch(e){}
+}
+$('alertOk').onclick = () => { seen = Math.floor(Date.now()/1000); try { localStorage.setItem(SEEN_KEY, String(seen)); } catch(e){}
+  fresh.clear(); lastCount = 0; $('alert').classList.add('hide'); render(); };
+
+/* telefonická rezervace */
+let f = {};
+function openAdd(){
+  const kinds = (data.tables.length ? [''] : []).concat((data.groups || []).map(g => g.id));
+  f = {k:kinds[0], p:2, t:null, s:'', d:60};
+  $('fKindW').classList.toggle('hide', kinds.length < 2);
+  $('fK').innerHTML = kinds.map(k => `<button data-k="${k}">${k ? (ICON[k] || '⏱') + ' ' + esc(grp(k).label) : '🍽️ Stůl'}</button>`).join('');
+  ['fName','fPhone','fNote'].forEach(id => $(id).value = '');
+  $('dlgMsg').textContent = '';
+  $('dlgT').textContent = `Telefonická rezervace — ${dayTitle(view).replace(/<small>.*/,'')}`;
+  drawForm(); $('dlg').classList.remove('hide');
+}
+function freeTables(t, p){
+  const span = [t, Math.min(t + data.sit, data.close)];
+  return data.tables.filter(tb => tb.cap >= p && !data.items.some(x => x.st !== 'cancelled' && x.s === tb.id && span[0] < x.b && x.a < span[1]));
+}
+function laneFree(G, t, d, p){
+  const n = Math.max(1, Math.ceil(p / G.per)); let free = 0;
+  for (const it of G.items) if (!data.items.some(x => x.st !== 'cancelled' && x.s.split('+').includes(it.id) && t < x.b && x.a < t + d)) free++;
+  return free >= n;
+}
+function laneTimesP(G, d){
+  const out = [], now = new Date(), nm = iso(now) === view ? now.getHours()*60 + now.getMinutes() : -1;
+  const gh = G.hours[new Date(view+'T12:00:00').getDay()]; if (!gh) return out;
+  for (let t = gh[0]; t + d <= gh[1]; t += G.step) if (t + G.step > nm) out.push(t);
+  return out;
+}
+function drawForm(){
+  document.querySelectorAll('#fK button').forEach(b => b.classList.toggle('on', b.dataset.k === f.k));
+  const G = f.k ? grp(f.k) : null;
+  $('fPl').textContent = G ? ppl(G).replace(/^./, c => c.toUpperCase()) : 'Osob';
+  $('fDurW').classList.toggle('hide', !G); $('fSW').classList.toggle('hide', !!G);
+  const maxP = G ? G.per * G.items.length : 12;
+  if (f.p > maxP) f.p = maxP;
+  $('fP').innerHTML = Array.from({length:maxP}, (_,i) => `<button data-p="${i+1}" class="${f.p===i+1?'on':''}">${i+1}</button>`).join('');
+  if (G){
+    const ds = []; for (let m = G.min; m <= G.max; m += G.step) ds.push(m);
+    if (!ds.includes(f.d)) f.d = ds[0];
+    $('fD').innerHTML = ds.map(m => `<button data-d="${m}" class="${f.d===m?'on':''}">${hod(m)}</button>`).join('');
+    const ts = laneTimesP(G, f.d);
+    if (f.t !== null && !(ts.includes(f.t) && laneFree(G, f.t, f.d, f.p))) f.t = null;
+    $('fT').innerHTML = ts.length ? ts.map(t => `<button data-t="${t}" class="${f.t===t?'on':''}" ${laneFree(G, t, f.d, f.p)?'':'disabled'}>${hhmm(t)}</button>`).join('')
+      : '<span class="empty">Tento den už nejde rezervovat.</span>';
+    return;
+  }
+  $('fT').innerHTML = data.times.length ? data.times.map(t => `<button data-t="${t}" class="${f.t===t?'on':''}" ${freeTables(t,f.p).length?'':'disabled'}>${hhmm(t)}</button>`).join('')
+    : '<span class="empty">Tento den už nejde rezervovat.</span>';
+  if (f.t !== null && !freeTables(f.t, f.p).length) f.t = null;
+  const free = f.t === null ? [] : freeTables(f.t, f.p);
+  if (f.s && !free.some(t => t.id === f.s)) f.s = '';
+  $('fS').innerHTML = f.t === null ? '<span class="empty">Nejdřív čas.</span>' :
+    `<button data-s="" class="${f.s===''?'on':''}">Automaticky</button>` + free.map(t => `<button data-s="${t.id}" class="${f.s===t.id?'on':''}">${esc(t.n)} (${t.cap})</button>`).join('');
+}
+$('fK').onclick = e => { const b = e.target.closest('[data-k]'); if (b){ f.k = b.dataset.k; f.t = null; drawForm(); } };
+$('fD').onclick = e => { const b = e.target.closest('[data-d]'); if (b){ f.d = +b.dataset.d; drawForm(); } };
+$('fP').onclick = e => { const b = e.target.closest('[data-p]'); if (b){ f.p = +b.dataset.p; drawForm(); } };
+$('fT').onclick = e => { const b = e.target.closest('[data-t]'); if (b && !b.disabled){ f.t = +b.dataset.t; drawForm(); } };
+$('fS').onclick = e => { const b = e.target.closest('[data-s]'); if (b){ f.s = b.dataset.s; drawForm(); } };
+$('addBtn').onclick = openAdd;
+$('dlgCancel').onclick = () => $('dlg').classList.add('hide');
+$('dlgSave').onclick = async () => {
+  if (f.t === null){ $('dlgMsg').textContent = 'Vyberte čas.'; return; }
+  if (!$('fName').value.trim()){ $('dlgMsg').textContent = 'Doplňte jméno.'; return; }
+  $('dlgSave').disabled = true;
+  try {
+    await call('add', {date:view, time:hhmm(f.t), p:f.p, table:f.k ? '' : f.s, g:f.k, dur:f.k ? f.d : '', name:$('fName').value.trim(), phone:$('fPhone').value.trim(), note:$('fNote').value.trim()});
+    $('dlg').classList.add('hide'); load();
+  } catch(err){ $('dlgMsg').textContent = err.message; }
+  finally { $('dlgSave').disabled = false; }
+};
+
+/* start */
+let timer = null;
+function tick(){ const n = new Date(); $('clock').textContent = `${pad(n.getHours())}:${pad(n.getMinutes())}`; }
+tick(); setInterval(tick, 5000);
+setInterval(() => { if (data && !$('app').classList.contains('hide')) render(); }, 60000);
+function startApp(){
+  $('pin').classList.add('hide'); $('app').classList.remove('hide');
+  if (!seen){ seen = Math.floor(Date.now()/1000); try { localStorage.setItem(SEEN_KEY, String(seen)); } catch(e){} }
+  load(); clearInterval(timer); timer = setInterval(checkNew, 30000);
+}
+(async () => {
+  try {
+    const me = await call('me');
+    if (me.venue){ $('brand').textContent = me.venue; $('pinTitle').innerHTML = `${esc(me.venue)}<small>panel obsluhy</small>`; document.title = `Rezervace · ${me.venue}`; }
+    if (me.demoPin) $('demoPin').textContent = `Ukázka — PIN je ${me.demoPin}`;
+    if (!me.pinSet){ showPin('PIN zatím není nastavený.'); return; }
+    me.authed ? startApp() : showPin();
+  } catch(e){ showPin('Server nedostupný.'); }
+})();
+</script>
+</body>
+</html>

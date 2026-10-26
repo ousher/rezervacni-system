@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rezervační systém pro restaurace, herny a provozy</title>
+<meta name="description" content="Online rezervace pro restaurace, bowling, kulečník, lezení i ordinace a servisy. Potvrzení hned, přehled pro obsluhu v mobilu. 7 900 Kč jednorázově, bez povinného měsíčního poplatku.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f2f4f3; --card:#ffffff; --ink:#14212b; --dim:#55626c; --line:#d9dfdd;
+    --signal:#e4572e; --signal-ink:#ffffff; --teal:#1f6f66; --teal-soft:#e2efec;
+    --ticket:#fffdf6; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 "Instrument Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1080px;margin:0 auto;padding-inline:20px}
+  h1,h2,h3{font-family:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;letter-spacing:-.01em;text-wrap:balance;margin:0}
+  h2{font-size:clamp(28px,4vw,40px);line-height:1.08;font-weight:800}
+  h3{font-size:20px;font-weight:600;line-height:1.2}
+  .kicker{font:700 13px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+  .lead{font-size:clamp(18px,2.2vw,21px);color:var(--dim);max-width:58ch}
+  section{padding-block:72px}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 22px;border-radius:12px;background:var(--signal);color:var(--signal-ink);font-weight:700;text-decoration:none;border:2px solid var(--signal)}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+  .btn:hover{filter:brightness(.95)}
+
+  /* hlavička */
+  header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px}
+  .logo{display:flex;align-items:center;gap:10px;font:800 18px "Bricolage Grotesque",sans-serif;text-decoration:none}
+  .logo i{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--ink);color:#fff;font:700 13px var(--mono);font-style:normal}
+  nav{display:flex;gap:22px;align-items:center}
+  nav a{text-decoration:none;color:var(--dim);font-weight:600;font-size:15px}
+  nav a.btn{color:var(--signal-ink);padding:10px 16px;font-size:15px}
+  nav a.btn{white-space:nowrap}
+  @media (max-width:760px){nav a:not(.btn){display:none} nav a.btn{padding:9px 12px;font-size:14px} .logo{font-size:16px}}
+
+  /* úvod */
+  .hero{padding-block:64px 80px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+  @media (max-width:860px){.hero-grid{grid-template-columns:1fr}}
+  .hero h1{font-size:clamp(38px,6vw,64px);line-height:1.02;font-weight:800;margin:14px 0 18px}
+  .hero h1 em{font-style:normal;color:var(--signal)}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+  .trust{margin-top:22px;font-size:15px;color:var(--dim)}
+
+  /* lístek */
+  .ticket{position:relative;background:var(--ticket);border:1px solid var(--line);border-radius:18px;padding:26px 26px 22px;box-shadow:0 18px 40px -22px rgba(20,33,43,.45);max-width:380px;justify-self:center;width:100%;transform:rotate(-2deg)}
+  .ticket::before,.ticket::after{content:"";position:absolute;top:118px;width:26px;height:26px;border-radius:50%;background:var(--paper);border:1px solid var(--line)}
+  .ticket::before{left:-14px} .ticket::after{right:-14px}
+  .t-top{display:flex;justify-content:space-between;align-items:baseline;font:700 12px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+  .t-num{font:800 64px/1 "Bricolage Grotesque",sans-serif;margin:10px 0 18px;letter-spacing:-.02em}
+  .t-perf{border-top:2px dashed var(--line);margin:0 -26px 16px}
+  .t-row{display:flex;justify-content:space-between;font-size:15px;padding:5px 0;border-bottom:1px solid #eee9da}
+  .t-row span:first-child{color:var(--dim)}
+  .t-row b{font-family:var(--mono);font-size:14px}
+  .t-ok{margin-top:16px;display:flex;align-items:center;gap:10px;font-weight:700;color:var(--teal)}
+  .t-ok i{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--teal);color:#fff;font-style:normal;font-size:14px}
+
+  /* pro koho */
+  .seg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+  @media (max-width:860px){.seg{grid-template-columns:1fr}}
+  .seg .c{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .seg .c .ic{font:700 13px var(--mono);color:var(--signal);letter-spacing:.08em}
+  .seg .c h3{margin:10px 0 8px}
+  .seg .c p{margin:0;color:var(--dim);font-size:16px}
+  .also{margin-top:16px;background:var(--ink);color:#eef3f1;border-radius:18px;padding:22px 24px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center}
+  @media (max-width:640px){.also{grid-template-columns:1fr}}
+  .also .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .also .chips span{border:1px solid #3a4b57;border-radius:999px;padding:6px 12px;font-size:15px}
+  .also p{margin:8px 0 0;color:#b9c6c2;font-size:15.5px}
+
+  /* dvě strany */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+  @media (max-width:760px){.two{grid-template-columns:1fr}}
+  .side{border-radius:18px;padding:24px;background:var(--card);border:1px solid var(--line)}
+  .side.staff{background:var(--teal-soft);border-color:#c7dfd9}
+  .side ol{margin:14px 0 0;padding-left:22px}
+  .side li{margin:8px 0}
+
+  /* funkce */
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:34px}
+  @media (max-width:860px){.feat{grid-template-columns:1fr 1fr}}
+  @media (max-width:540px){.feat{grid-template-columns:1fr}}
+  .feat div{background:var(--card);padding:20px}
+  .feat b{display:block;margin-bottom:6px}
+  .feat span{color:var(--dim);font-size:15.5px}
+
+  /* kroky */
+  .steps{list-style:none;padding:0;margin:34px 0 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;counter-reset:s}
+  @media (max-width:760px){.steps{grid-template-columns:1fr}}
+  .steps li{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .steps li::before{content:"0" counter(s);display:block;font:800 34px "Bricolage Grotesque",sans-serif;color:var(--signal);margin-bottom:6px}
+  .steps span{color:var(--dim);font-size:15.5px}
+
+  /* cena */
+  .price{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:34px}
+  @media (max-width:760px){.price{grid-template-columns:1fr}}
+  .pc{background:var(--card);border:2px solid var(--line);border-radius:20px;padding:26px}
+  .pc.main{border-color:var(--ink)}
+  .pc .k{font:700 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+  .pc .v{font:800 46px/1.05 "Bricolage Grotesque",sans-serif;margin:8px 0 4px;font-variant-numeric:tabular-nums}
+  .pc .v small{font-size:18px;font-weight:600;color:var(--dim)}
+  .pc ul{margin:12px 0 0;padding-left:20px;color:var(--dim)}
+  .pc li{margin:5px 0}
+  .note{color:var(--dim);font-size:15px;margin-top:14px}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);font-size:16px}
+  .tw{overflow-x:auto;border:1px solid var(--line);border-radius:16px;margin-top:28px}
+  th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:#f7f9f8}
+  tr:last-child td{border-bottom:0}
+  .yes{color:var(--teal);font-weight:700}
+
+  /* otázky */
+  details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-top:10px}
+  summary{cursor:pointer;font-weight:700;list-style:none}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";float:right;font:700 20px var(--mono);color:var(--signal)}
+  details[open] summary::after{content:"–"}
+  details p{margin:10px 0 0;color:var(--dim)}
+
+  /* kontakt */
+  .contact{background:var(--ink);color:#eef3f1;border-radius:24px;padding:40px;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+  @media (max-width:760px){.contact{grid-template-columns:1fr;padding:28px}}
+  .contact h2{color:#fff}
+  .contact p{color:#b9c6c2}
+  .contact .line{font:700 20px var(--mono);margin:6px 0}
+  .contact .line a{text-decoration:none}
+  footer{padding-block:28px 40px;color:var(--dim);font-size:14px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#"><i>R</i>Rezervační systém</a>
+    <nav>
+      <a href="#pro-koho">Pro koho</a>
+      <a href="#jak">Jak to funguje</a>
+      <a href="#cena">Cena</a>
+      <a href="#kontakt">Kontakt</a>
+      <a class="btn" href="./ukazka/start.html">Vyzkoušet ukázku</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="kicker">Online rezervace · Praha</div>
+        <h1>Lidé si rezervují sami. <em>Vy jen víte, kdo přijde.</em></h1>
+        <p class="lead">Pro restaurace, herny a každý provoz, kam se chodí na čas. Host si vybere den a čas, rezervace je potvrzená hned a obsluha ji vidí v mobilu. Telefon zvoní méně, lístečky se neztrácejí.</p>
+        <div class="cta">
+          <a class="btn" href="./ukazka/start.html">Vyzkoušet ukázku →</a>
+          <a class="btn ghost" href="#cena">Kolik to stojí</a>
+        </div>
+        <p class="trust">Ukázka běží v prohlížeči, nic se neodesílá. Stejný systém už je v ostrém provozu v jedné pražské hospodě.</p>
+      </div>
+
+      <div class="ticket" aria-label="Ukázka potvrzené rezervace">
+        <div class="t-top"><span>Rezervace</span><span>Pá · 19:00</span></div>
+        <div class="t-num">R-0047</div>
+        <div class="t-perf"></div>
+        <div class="t-row"><span>Kde</span><b>Dráha 2 + 3</b></div>
+        <div class="t-row"><span>Kolik</span><b>10 hráčů · 2 h</b></div>
+        <div class="t-row"><span>Kdo</span><b>Novákovi</b></div>
+        <div class="t-ok"><i>✓</i>Potvrzeno hned, bez čekání na telefon</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pro-koho" style="padding-top:24px">
+    <div class="wrap">
+      <div class="kicker">Pro koho</div>
+      <h2>Všude, kam lidé chodí a pak čekají.</h2>
+      <div class="seg">
+        <div class="c">
+          <div class="ic">01 · STOLY</div>
+          <h3>Restaurace a hospody</h3>
+          <p>Host zadá počet osob, systém vybere vhodný stůl. Dvojice nezabere salonek, velkou skupinu pošle na telefon.</p>
+        </div>
+        <div class="c">
+          <div class="ic">02 · DRÁHY NA ČAS</div>
+          <h3>Bowling, kulečník, šipky</h3>
+          <p>Rezervace na hodiny. Větší parta dostane automaticky víc drah nebo stolů najednou. Stůl na jídlo i dráhu v jednom systému.</p>
+        </div>
+        <div class="c">
+          <div class="ic">03 · LEKCE</div>
+          <h3>Lezení, sport, kurzy</h3>
+          <p>Lekce s instruktorem, vlastní otevírací doba pro každou nabídku, počet lidí na jednoho trenéra.</p>
+        </div>
+      </div>
+      <div class="also">
+        <div class="kicker" style="color:#8fd3c6">Funguje i pro</div>
+        <div>
+          <div class="chips"><span>veterinu</span><span>autoservis</span><span>kadeřnictví</span><span>fyzioterapii</span><span>pneuservis</span><span>studio a dílnu</span></div>
+          <p>Kdekoli, kde se chodí na čas: ordinace, zvedák, křeslo. Ukázku pro váš obor připravím na míru, než se rozhodnete.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="jak">
+    <div class="wrap">
+      <div class="kicker">Jak to funguje</div>
+      <h2>Dvě strany, jeden přehled.</h2>
+      <div class="two">
+        <div class="side">
+          <h3>Host</h3>
+          <ol>
+            <li>Vybere, co chce: stůl, dráhu, lekci, termín.</li>
+            <li>Počet lidí, den a volný čas, jméno a telefon.</li>
+            <li>Hned vidí potvrzení. Žádná registrace, žádné čekání na odpověď.</li>
+          </ol>
+        </div>
+        <div class="side staff">
+          <h3>Obsluha</h3>
+          <ol>
+            <li>Na mobilu, počítači u pokladny nebo tabletu. Stačí prohlížeč a PIN.</li>
+            <li>Kdo dnes přijde, co je volné, nové rezervace svítí.</li>
+            <li>Telefonické rezervace zapíše do stejného přehledu, takže web nikdy neprodá obsazené místo.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="kicker">Co to umí</div>
+      <h2>Přesně to, co provoz potřebuje.</h2>
+      <div class="feat">
+        <div><b>Rezervace za půl minuty</b><span>Na mobilu, bez registrace a bez aplikace.</span></div>
+        <div><b>Potvrzení hned</b><span>Nic se neschvaluje ručně a host ví, že má místo.</span></div>
+        <div><b>Místo vybere systém</b><span>Nejmenší vhodný stůl, potřebný počet drah, volný instruktor.</span></div>
+        <div><b>Přišli / nepřišli</b><span>Jedním ťuknutím. Zrušení hned uvolní místo na webu.</span></div>
+        <div><b>Vaše barvy a pravidla</b><span>Otevírací doba, poslední příchod, velikost skupin, co jen přes telefon.</span></div>
+        <div><b>Data zůstávají vám</b><span>Běží na vašem webu. Kontakty hostů se po dni návštěvy samy mažou.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="kicker">Jak to proběhne</div>
+      <h2>Do týdne v provozu.</h2>
+      <ol class="steps">
+        <li><b>Krátká schůzka u vás</b><br><span>Stoly, dráhy nebo ordinace, kapacity, otevírací doba. Ukázku pro váš podnik vám ukážu předem.</span></li>
+        <li><b>Nastavím a nasadím</b><br><span>Ve vašich barvách, na váš web, nebo na samostatnou adresu, když web nemáte. QR kód a plakát.</span></li>
+        <li><b>Zaškolení obsluhy, 30 minut</b><br><span>Na zařízení, které už máte. Žádný nový hardware.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="cena" style="padding-top:0">
+    <div class="wrap">
+      <div class="kicker">Cena</div>
+      <h2>Jednou zaplatíte. Měsíční poplatek jen když chcete.</h2>
+      <div class="price">
+        <div class="pc main">
+          <div class="k">Zřízení · jednorázově</div>
+          <div class="v">7 900 Kč</div>
+          <ul>
+            <li>nastavení provozu na míru</li>
+            <li>vzhled ve vašich barvách</li>
+            <li>nasazení na váš web a QR kód</li>
+            <li>panel obsluhy a zaškolení</li>
+          </ul>
+        </div>
+        <div class="pc">
+          <div class="k">Provoz a správa · volitelné</div>
+          <div class="v">390 Kč <small>/ měsíc</small></div>
+          <ul>
+            <li>hosting, když nemáte vlastní web</li>
+            <li>změny časů, stolů, svátků</li>
+            <li>drobné úpravy na přání</li>
+            <li>bez závazku, zrušíte kdykoli</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note">Ceny jsou konečné, nejsem plátcem DPH. Žádné provize z rezervací.</p>
+
+      <div class="tw"><table>
+        <tr><th></th><th>Tento systém</th><th>Velké rezervační portály</th></tr>
+        <tr><td>Měsíční poplatek</td><td class="yes">žádný povinný</td><td>obvykle předplatné nebo poplatek za hosta</td></tr>
+        <tr><td>Kontakty hostů</td><td class="yes">jen vaše</td><td>vede je i platforma</td></tr>
+        <tr><td>Úpravy na míru</td><td class="yes">ano, přímo pro váš provoz</td><td>jen co platforma nabízí</td></tr>
+        <tr><td>Najdou vás noví hosté na portálu</td><td>ne, rezervují přes váš web a sítě</td><td class="yes">ano, to je jejich síla</td></tr>
+      </table></div>
+      <p class="note">Poctivě: když chcete hlavně nové hosty z velkého portálu, je portál lepší volba. Když chcete, aby vaši lidé pohodlně rezervovali u vás, je tohle levnější a máte to pod kontrolou.</p>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="kicker">Časté otázky</div>
+      <h2>Na co se ptají majitelé.</h2>
+      <details><summary>Potřebujeme kvůli tomu tablet?</summary><p>Ne. Panel obsluhy běží v prohlížeči na čemkoli: mobil vedoucího, počítač u pokladny, tablet, pokud ho máte.</p></details>
+      <details><summary>Nemáme web, jen Facebook.</summary><p>Nevadí. Rezervace pak běží na samostatné adrese a odkaz dáte na Facebook, Instagram, do Google a na QR kód na stůl.</p></details>
+      <details><summary>Co když lidé pořád volají?</summary><p>Ať volají. Telefonickou rezervaci zapíšete do stejného panelu a web pak ví, že místo je obsazené.</p></details>
+      <details><summary>Umí to zálohy nebo platby předem?</summary><p>Zatím ne. Velké skupiny nebo akce můžete nechat jen přes telefon, třeba se zálohou, jak jste zvyklí.</p></details>
+      <details><summary>Jsme veterina nebo servis, ne restaurace.</summary><p>Princip je stejný: zdroj na čas, ordinace, zvedák, křeslo. Ukázku pro váš obor připravím předem, ať vidíte, jak by to vypadalo u vás.</p></details>
+    </div>
+  </section>
+
+  <section id="kontakt" style="padding-top:0">
+    <div class="wrap">
+      <div class="contact">
+        <div>
+          <h2>Ukážu vám to u vás, za deset minut.</h2>
+          <p>Připravím ukázku přímo pro váš provoz a přijdu ji předvést. Bez závazku.</p>
+        </div>
+        <div>
+          <div style="font-weight:700;color:#fff">Ondřej Šrámek</div>
+          <div class="line"><a href="tel:+420720758774">+420 720 758 774</a></div>
+          <div class="line" style="font-size:16px"><a href="mailto:ondrej@tia-framework.com">ondrej@tia-framework.com</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Provozovatel: Ondřej Šrámek, IČO 24974803 · Praha</div>
+</footer>
+</body>
+</html>
