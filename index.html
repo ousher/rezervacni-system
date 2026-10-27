@@ -126,6 +126,11 @@
   .tw{overflow-x:auto;border:1px solid var(--line);border-radius:16px;margin-top:28px}
   .fit{margin-top:28px;padding:22px 24px;border-left:4px solid var(--btn);background:var(--card);border-radius:0 16px 16px 0}
   .fit h3{margin:0 0 8px}
+  .pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:20px}
+  .pk{display:flex;flex-direction:column;gap:6px;padding:20px 22px;background:var(--card);border:1px solid var(--line);border-radius:16px;text-decoration:none;color:var(--ink)}
+  .pk b{font-size:19px;color:var(--btn)}
+  .pk span{color:var(--dim)}
+  .pk:hover{border-color:var(--btn)}
   .fit p{margin:8px 0 0;color:var(--dim)}
   th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
   th{font:700 12px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim);background:#f7f9f8}
@@ -160,7 +165,7 @@
       <a href="#jak">Jak to funguje</a>
       <a href="#cena">Cena</a>
       <a href="#kontakt">Kontakt</a>
-      <a class="btn" href="./ukazka/start.html">Vyzkoušet ukázku</a>
+      <a class="btn" href="#ukazky">Vyzkoušet ukázku</a>
     </nav>
   </div>
 </header>
@@ -171,12 +176,12 @@
       <div>
         <div class="kicker">Online rezervace · Praha</div>
         <h1>Lidé si rezervují sami. <em>Vy jen víte, kdo přijde.</em></h1>
-        <p class="lead">Pro hospody, restaurace a herny, které nechtějí portál ani si to nastavovat samy. Host si vybere den a čas, rezervace je potvrzená hned a obsluha ji vidí v mobilu. Telefon zvoní méně, lístečky se neztrácejí.</p>
+        <p class="lead">Pro hospody, restaurace a herny, které nechtějí portál. Rezervace vám nastavím podle vašich stolů, drah a otevírací doby. Host si vybere volný čas, potvrzení má hned a obsluha přehled v mobilu.</p>
         <div class="cta">
-          <a class="btn" href="./ukazka/start.html">Vyzkoušet ukázku →</a>
+          <a class="btn" href="#ukazky">Vyzkoušet ukázku →</a>
           <a class="btn ghost" href="#cena">Kolik to stojí</a>
         </div>
-        <p class="trust">Ukázka běží v prohlížeči, nic se neodesílá. Stejný systém už je v ostrém provozu v jedné pražské hospodě. Máte hernu? <a href="./ukazka-herna/start.html">Ukázka se stoly i drahami →</a></p>
+        <p class="trust">Ukázka běží v prohlížeči, nic se neodesílá. Stejný systém už je v ostrém provozu v jedné pražské hospodě.</p>
       </div>
 
       <div class="ticket" aria-label="Ukázka potvrzené rezervace">
@@ -188,6 +193,18 @@
         <div class="t-row"><span>Kdo</span><b>Novákovi</b></div>
         <div class="t-ok"><i>✓</i>Potvrzeno hned, bez čekání na telefon</div>
       </div>
+    </div>
+  </section>
+
+  <section id="ukazky" style="padding-top:8px">
+    <div class="wrap">
+      <div class="kicker">Ukázka</div>
+      <h2>Vyzkoušejte, co se hodí k vašemu provozu.</h2>
+      <div class="pick">
+        <a class="pk" href="./ukazka/start.html"><b>Hospoda nebo restaurace →</b><span>Rezervace stolu podle počtu hostů a přehled pro obsluhu.</span></a>
+        <a class="pk" href="./ukazka-herna/start.html"><b>Herna nebo bowling →</b><span>Stoly, dráhy a kulečník na čas ve společném přehledu.</span></a>
+      </div>
+      <p class="note">Obě ukázky běží jen ve vašem prohlížeči. Rezervace se neodesílají do skutečného podniku.</p>
     </div>
   </section>
 
@@ -250,7 +267,7 @@
         <div><b>Místo vybere systém</b><span>Nejmenší vhodný stůl, potřebný počet drah, volný instruktor.</span></div>
         <div><b>Přišli / nepřišli</b><span>Jedním ťuknutím. Zrušení hned uvolní místo na webu.</span></div>
         <div><b>Vaše barvy a pravidla</b><span>Otevírací doba, poslední příchod, velikost skupin, co jen přes telefon.</span></div>
-        <div><b>Žádná databáze, kterou musíte hlídat</b><span>Kontakty hostů se po návštěvě samy mažou, takže s nimi nemáte starost kvůli GDPR.</span></div>
+        <div><b>Kontakty se nehromadí</b><span>Po návštěvě se kontakty hostů automaticky smažou.</span></div>
       </div>
     </div>
   </section>
@@ -290,7 +307,7 @@
             <li>údržba, opravy a aktualizace</li>
             <li>změny otevírací doby, stolů, kapacit a svátků</li>
             <li>konkrétní člověk, kterému zavoláte</li>
-            <li>výpovědní lhůta 2 měsíce, po skončení dostanete export rezervací (CSV)</li>
+            <li>výpovědní lhůta 2 měsíce; pak rezervační stránka přestane fungovat a dostanete export rezervací (CSV)</li>
           </ul>
         </div>
       </div>
