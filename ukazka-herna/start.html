@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Rezervace stolů — ukázka</title>
+<style>
+  :root{--brand:#2a5d8f;--bg:#fbf8f3;--card:#fff;--ink:#24201c;--dim:#6f6860;--line:#e7e0d6}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+  .wrap{max-width:720px;margin:0 auto;padding:36px 16px 48px}
+  h1{font-size:28px;line-height:1.15;margin:0 0 8px;text-wrap:balance}
+  p.lead{color:var(--dim);margin:0 0 26px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:560px){.grid{grid-template-columns:1fr}}
+  a.card{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
+  a.card:hover{border-color:var(--brand)}
+  .card b{display:block;font-size:19px;margin-bottom:6px}
+  .card span{display:block;color:var(--dim);font-size:15px}
+  .card .go{display:inline-block;margin-top:14px;color:var(--brand);font-weight:700}
+  ol{color:var(--dim);font-size:15px;padding-left:20px;margin:28px 0 0}
+  ol li{margin:6px 0}
+  .tip{margin-top:22px;font-size:14px;color:var(--dim);border-top:1px solid var(--line);padding-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Herna — stoly, bowling i kulečník v jednom</h1>
+  <p class="lead">Ukázka na vymyšlené herně: stůl na jídlo, bowlingová dráha i kulečník v jednom systému. Nic se neodesílá, data zůstávají jen ve vašem prohlížeči.</p>
+  <div class="grid">
+    <a class="card" href="./index.html"><b>👤 Jako host</b><span>Stůl pro počet osob, nebo dráha či kulečník na čas. Větší parta dostane automaticky víc drah.</span><span class="go">Zarezervovat →</span></a>
+    <a class="card" href="./obsluha/"><b>🍽️ Jako obsluha</b><span>Mobil, počítač nebo tablet u baru: kdo dnes přijde, který stůl je volný, telefonické rezervace. PIN 1234.</span><span class="go">Otevřít panel →</span></a>
+  </div>
+  <ol>
+    <li>Zarezervujte jako host třeba na dnešní večer.</li>
+    <li>Otevřete panel obsluhy — rezervace tam do 30 vteřin pípne a svítí jako nová.</li>
+    <li>Zapište telefonickou rezervaci, přesuňte hosty k jinému stolu, označte „přišli“.</li>
+  </ol>
+  <p class="tip">Na mobilu i tabletu. Nejlíp se to ukazuje se dvěma okny vedle sebe — host vlevo, obsluha vpravo.</p>
+  <p class="tip"><a href="https://rezervacni-system.online/#kontakt" style="color:var(--brand);font-weight:700">Chci to u sebe → ukázka pro můj podnik</a></p>
+  <p class="tip"><a href="https://rezervacni-system.online/#cena" style="color:var(--brand);font-weight:700">Co to umí a kolik to stojí →</a></p>
+</div>
+</body>
+</html>

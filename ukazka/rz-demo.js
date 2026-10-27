@@ -306,7 +306,8 @@
     b.style.cssText = 'position:relative;z-index:1;background:#e7b552;color:#241a05;font:600 13px/1.35 system-ui,sans-serif;padding:7px 12px;text-align:center';
     b.innerHTML = 'UKÁZKA · ' + (CFG.DEMO_LABEL || 'podnik je vymyšlený') + ' · nic se neodesílá, data zůstávají jen v tomto prohlížeči · '
       + '<a href="' + (location.pathname.includes('/obsluha/') ? '../' : './') + 'start.html" style="color:inherit">přepnout host / obsluha</a> · '
-      + '<a href="#" onclick="RZ_DEMO_RESET();return false" style="color:inherit">začít znovu</a>';
+      + '<a href="#" onclick="RZ_DEMO_RESET();return false" style="color:inherit">začít znovu</a>'
+      + ' · <a href="https://rezervacni-system.online/#kontakt" target="_top" style="color:inherit;font-weight:800">chci to u sebe →</a>';   // D224 Smith: cesta k poptávce z obou obrazovek
     document.body.prepend(b);
   });
   window.RZ_DEMO = { CFG, db: () => db(), pick, times, span };

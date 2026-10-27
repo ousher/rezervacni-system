@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /ukazka/
+Disallow: /ukazka-herna/
