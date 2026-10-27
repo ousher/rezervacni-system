@@ -201,6 +201,7 @@
     if (c[0] === 'busy') return fail(409, G ? `Na tento čas už nemáme volných ${units(G, p)}× ${G.unit}. Vyberte prosím jiný.` : `Na tento čas už pro ${p} ${osob(p)} nemáme volný stůl. Vyberte prosím jiný.`);
     db().det[c[2]] = { r: c[2], d: date, a: t, p, g, dur: G ? dur : null, n: name, ph: phone, em: email, note, z: (f.get('z') || ''), via: 'web', st: 'new', c: nowSec() };
     commit();
+    if (email) mailDemo({ email, date, time: hhmm(t), p, g, dur: G ? dur : '' });   // D224 (Andrej): ukázkové potvrzení na zadaný e-mail
     return ok({ ref: c[2], time: hhmm(t), p, g, units: G ? c[1].length : null });
   }
 
@@ -286,6 +287,17 @@
 
   // ── napojení na fetch ──
   const realFetch = window.fetch.bind(window);
+
+  // Ukázkové potvrzení e-mailem (D224). Jen na veřejném webu — lokální testy a dema na míru nic neposílají.
+  // Server pošle PEVNÝ text (datum, čas, počet, druh); jméno ani poznámka ven nejdou. Limity hlídá server.
+  const MAILER = 'https://rezervace-mailer.tia-hydra.workers.dev/potvrzeni';
+  function mailDemo(d) {
+    if (!/(^|\.)rezervacni-system\.online$/.test(location.hostname)) return;
+    const note = (txt) => setTimeout(() => { const b = document.getElementById('done'); if (b) b.insertAdjacentHTML('beforeend', '<div style="margin-top:8px;font-size:14px;opacity:.8">' + txt + '</div>'); }, 400);
+    realFetch(MAILER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
+      .then(r => note(r.ok ? '📧 Ukázkové potvrzení jsme poslali na váš e-mail.' : r.status === 429 ? '📧 Na tuto adresu už dnes ukázkové potvrzení odešlo.' : '📧 Ukázkové potvrzení se teď nepodařilo odeslat.'))
+      .catch(() => note('📧 Ukázkové potvrzení se teď nepodařilo odeslat.'));
+  }
   window.fetch = async function (input, init) {
     const url = new URL(typeof input === 'string' ? input : input.url, location.href);
     const post = ((init && init.method) || 'GET').toUpperCase() === 'POST';
