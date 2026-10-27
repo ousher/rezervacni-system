@@ -295,7 +295,10 @@
     if (!/(^|\.)rezervacni-system\.online$/.test(location.hostname)) return;
     const note = (txt) => setTimeout(() => { const b = document.getElementById('done'); if (b) b.insertAdjacentHTML('beforeend', '<div style="margin-top:8px;font-size:14px;opacity:.8">' + txt + '</div>'); }, 400);
     realFetch(MAILER, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) })
-      .then(r => note(r.ok ? '📧 Ukázkové potvrzení jsme poslali na váš e-mail.' : r.status === 429 ? '📧 Na tuto adresu už dnes ukázkové potvrzení odešlo.' : '📧 Ukázkové potvrzení se teď nepodařilo odeslat.'))
+      .then(r => r.json().catch(() => ({})).then(j => note(r.ok ? '📧 Ukázkové potvrzení jsme poslali na váš e-mail.'
+        : j.error === 'adresa' ? '📧 Na tuto adresu už dnes ukázkové potvrzení odešlo (jedno za den).'
+        : r.status === 429 ? '📧 Dnešní limit ukázkových e-mailů je vyčerpaný, zkuste to prosím zítra.'
+        : '📧 Ukázkové potvrzení se teď nepodařilo odeslat.')))
       .catch(() => note('📧 Ukázkové potvrzení se teď nepodařilo odeslat.'));
   }
   window.fetch = async function (input, init) {
