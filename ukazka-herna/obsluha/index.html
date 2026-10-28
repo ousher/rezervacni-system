@@ -264,6 +264,13 @@ function render(){
   $('list').innerHTML = html;
 }
 
+// Kam jde skupinu přesunout (D225, tip Martin): jen stoly, kam se vejde a které jsou v její době volné.
+// Stejné pravidlo jako server (rz_move): překryv času na stejném stole se zrušenými se nepočítá.
+function moveTargets(x){
+  const busy = new Set(data.items.filter(y => y.r !== x.r && y.st !== 'cancelled' && !y.g && y.a < x.b && x.a < y.b).map(y => y.s));
+  return data.tables.filter(t => t.id === x.s || (t.cap >= x.p && !busy.has(t.id)));
+}
+
 function card(x, nm, pastDay){
   let cls = 'card', tags = [];
   if (x.st === 'cancelled') cls += ' cancelled'; else if (x.st === 'arrived') cls += ' arrived'; else if (x.st === 'noshow') cls += ' noshow';
@@ -278,8 +285,8 @@ function card(x, nm, pastDay){
   if (x.st === 'cancelled') tags.push('<span class="tag">ZRUŠENO</span>');
   const g = x.g ? grp(x.g) : null;
   const sel = (x.st === 'cancelled' || g) ? `<span class="meta" style="margin-left:auto;font-weight:700">${g ? (ICON[g.id] || '⏱') + ' ' : ''}${esc(x.s ? tname(x.s) : '')}</span>` :
-    `<select data-move="${esc(x.r)}" aria-label="Stůl">${data.tables.map(t =>
-      `<option value="${t.id}" ${t.id===x.s?'selected':''} ${t.cap < x.p ? 'disabled' : ''}>${esc(t.n)} (${t.cap})</option>`).join('')}</select>`;
+    `<select data-move="${esc(x.r)}" aria-label="Stůl">${moveTargets(x).map(t =>
+      `<option value="${t.id}" ${t.id===x.s?'selected':''}>${esc(t.n)} (${t.cap})</option>`).join('')}</select>`;
   const acts = x.st === 'cancelled' ? '' : `<div class="acts">
     <button class="yes ${x.st==='arrived'?'on':''}" data-a="arrived" data-r="${esc(x.r)}">✓ Přišli</button>
     <button class="no ${x.st==='noshow'?'on':''}" data-a="noshow" data-r="${esc(x.r)}">Nepřišli</button>
