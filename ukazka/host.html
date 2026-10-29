@@ -94,7 +94,7 @@
 </section>
 
 <section id="durSec" hidden>
-  <h2><b>⏱</b><span id="durH">Jak dlouho budete hrát?</span></h2>
+  <h2><b>⏱</b><span id="durH">Jak dlouho u nás budete?</span></h2>
   <div class="chips" id="dur"></div>
 </section>
 
@@ -189,7 +189,7 @@ async function getJSON(u){ const r = await fetch(u, {cache:'no-store'}); const j
 function drawParty(){
   const g = G(), n = g ? g.per * g.maxUnits : INFO.maxParty, v = INFO.venue, tel = `<a href="tel:${esc(v.phone.replace(/[^+\d]/g,''))}">${esc(v.phone)}</a>`;
   $('partyH').textContent = g ? (g.askP || 'Kolik vás bude hrát?') : 'Kolik vás bude?';
-  if (g) $('durH').textContent = g.askDur || 'Jak dlouho budete hrát?';
+  $('durH').textContent = g ? (g.askDur || 'Jak dlouho budete hrát?') : 'Jak dlouho u nás budete?';
   $('party').innerHTML = Array.from({length:n}, (_,i) => `<button class="chip" data-p="${i+1}" aria-pressed="false">${i+1}</button>`).join('');
   $('more').innerHTML = g ? (g.note ? `${esc(g.note)} ${tel}.` : `Na jednu ${esc(g.unit)} až ${g.per} ${esc(PPL())} — víc ${esc(PPL())} dostane víc drah najednou (nejvýš ${g.maxUnits}). Větší akce: ${tel}.`)
                           : (v.bigParty ? `${esc(v.bigParty)} ${tel}.` : `Víc než ${n}? Zavolejte nám: ${tel} — spojíme stoly.`);
